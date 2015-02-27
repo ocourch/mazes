@@ -84,7 +84,57 @@ class Maze
 		if x1 == x2 && y1 == y2
 			return true
 		end
-		
+		S = Hash.new
+		(0...@width).each do |w|
+			(0...@height).each do |h|
+				S.store(wh, Cell.new(w,h))
+			end
+		end
+		C = S[xy]
+		C.visited = true
+		Q = Queue.new
+		Q.enq(C)
+		path = false
+		while Q.empty==false do
+			temp = Q.pop
+			if temp.x == x2 && temp.y == y2
+				path = true
+				break
+			end
+
+			if temp.up == true
+				checker = S[temp.x, temp.y-1]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.down == true
+				checker = S[temp.x, temp.y+1]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.left == true
+				checker = S[temp.x-1, temp.y]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.right == true
+				checker = S[temp.x+1, temp.y]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+		end
+		return path
+	end
+
+
 	end
 
 	def trace(x1, y1, x2, y2)
@@ -111,8 +161,17 @@ class Cell
 		@down = finddown
 		@left = findleft
 		@right = findright
+		@visited = false		
 		
 	end
+
+	attr_accessor :visited
+	attr_reader :up
+	attr_reader :down
+	attr_reader :left
+	attr_reader :right
+	attr_reader :x
+	attr_reader :y
 	
 	def findup
 		if @y == 0
