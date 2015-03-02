@@ -138,16 +138,102 @@ class Maze
 	end
 
 	def trace(x1, y1, x2, y2)
+		if x1 == x2 && y1 == y2
+			return true
+		end
+		S = Hash.new
+		(0...@width).each do |w|
+			(0...@height).each do |h|
+				S.store(wh, Cell.new(w,h))
+			end
+		end
+		C = S[xy]
+		C.visited = true
+		Q = Queue.new
+		Q.enq(C)
+		path = false
+		while Q.empty==false do
+			temp = Q.pop
+			if temp.x == x2 && temp.y == y2
+				path = true
+				break
+			end
 
+			if temp.up == true
+				checker = S[temp.x, temp.y-1]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.down == true
+				checker = S[temp.x, temp.y+1]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.left == true
+				checker = S[temp.x-1, temp.y]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+			if temp.right == true
+				checker = S[temp.x+1, temp.y]
+				if checker.visited == false
+					checker.visited = true
+					Q.enq(checker)
+				end
+			end
+		end
+		return path
+	
 	end
 
 	def redesign
-		
+		temp_char_array = @maze_string.toCharArray
+		A = Array.new
+		counter = @width*2+3
+		level = 0
+		minicounter0 = 1
+		minicounter1 = 1
+		(1..@width-1*@height-1).each do |x|
+			if level == 0
+				if minicounter0 == 3
+					A.push(counter)
+					counter += 4
+					level = 1
+					minicounter0 = 1
+				else
+					A.push(counter)
+					counter += 2
+					minicounter0 ++
+				end
+
+			elsif level == 1
+				if minicounter1 == 4
+					A.push(counter)
+					counter += 4
+					level =0
+					minicounter1 =1
+				else
+					A.push(counter)
+					counter +=2
+					minicounter1 ++
+				end
+			end
+		end
+
+		(0..temp_char_array.length).each do |c|
+			if A.contains(c)
+				r = Random.new
+				temp_char_array[c]=r.rand(1)
+			end
+		end
 	end
-
 	
-
-
 end
 
 class Cell
@@ -165,7 +251,7 @@ class Cell
 		
 	end
 
-	attr_accessor :visited
+	attr_atemp_char_arrayessor :visited
 	attr_reader :up
 	attr_reader :down
 	attr_reader :left
