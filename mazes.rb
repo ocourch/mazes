@@ -317,7 +317,7 @@ b = m.solve(0,0,0,3)
 puts ''
 puts b
 puts ''
-m.trace(0,0,3,3)
+m.trace(0,0,0,3)
 m.redesign
 puts ''
 m.display
